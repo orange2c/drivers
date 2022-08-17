@@ -1,9 +1,10 @@
 # ST7789V驱动
 适用于5.x版本，linux项目自带的st7789v驱动有问题不能正常使用
 ## 驱动放置
-	将 fbtft-core.c 和 fb_st7789v.c 存放到路径 linux/drivers/staging/fbtft 下，替换原有文件
+将 fbtft-core.c 和 fb_st7789v.c 存放到路径 linux/drivers/staging/fbtft 下，替换原有文件
 ## 启用驱动
-	进入menuconfig，按顺序启用到st7789v这个驱动选项即可
+进入menuconfig，按顺序启用到st7789v这个驱动选项即可
+
 	Device Drivers  --->　
 		[*] Staging drivers  --->　
 			<*>   Support for small TFT LCD display modules  ---> 
