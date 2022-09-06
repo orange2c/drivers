@@ -9,9 +9,6 @@
 #include <linux/timex.h>
 #include "linux/of.h"
 
-// #define lcd.width 320
-// #define lcd.hight 240
-
 /*
 设备树预留节点
 rotate:	角度,顺时针
@@ -81,17 +78,6 @@ void lcd_write_buf(uint16_t *buf, size_t count )
 	gpiod_set_value( lcd.pin_dc, 1 );
 	spi_write(lcd.spi,  buf, count*2 );
 }
-void lcd_reset(void)
-{
-	gpiod_set_value( lcd.pin_reset, 1 );
-	msleep( 1 );
-	gpiod_set_value( lcd.pin_reset, 0 );
-	msleep( 1 );
-	gpiod_set_value( lcd.pin_reset, 1 );
-	msleep( 1 );
-}
-
-
 void lcd_set_address(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
     lcd_write_command(0x2a);
@@ -105,6 +91,15 @@ void lcd_set_address(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 	lcd_write_data( y2>>8 );
 	lcd_write_data( y2 );
     lcd_write_command(0x2C);
+}
+void lcd_reset(void)
+{
+	gpiod_set_value( lcd.pin_reset, 1 );
+	msleep( 1 );
+	gpiod_set_value( lcd.pin_reset, 0 );
+	msleep( 1 );
+	gpiod_set_value( lcd.pin_reset, 1 );
+	msleep( 1 );
 }
 
 uint16_t rgb565( uint8_t r, uint8_t g, uint8_t b )
@@ -377,6 +372,7 @@ int tree_match( struct device_node *node)
 	bool *m_bool_value[MATCH_bool_COUNT] = { &(lcd.color_Inversion), &(lcd.st7789v_debug)  };
 	struct property *pro;
 
+	printk("st7789v match\r\n");
 	for( i=0; i<MATCH_GPIO_COUNT; i++  )
 	{
 		*(m_gpio_value[i]) = devm_gpiod_get_index( &lcd.spi->dev, m_gpio_str[i], 0, GPIOD_OUT_HIGH )  ;
@@ -506,4 +502,5 @@ static void __exit drv_module_exit( void )
 }
 module_init( drv_module_init );
 module_exit( drv_module_exit );
+MODULE_AUTHOR( "orange2c" );
 MODULE_LICENSE( "GPL" );
